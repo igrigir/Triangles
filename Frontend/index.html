@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Triangle API Client</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .header-gradient {
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f4f8 25%, #d9e2ec 25%, #d9e2ec 50%, #f0f4f8 50%, #f0f4f8 75%, #d9e2ec 75%, #d9e2ec 100%);
+            background-size: 28px 28px;
+        }
+
+
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+
+    <!-- Naslov u gradijent bloku -->
+    <div class="header-gradient text-center">
+        <h1 class="mb-0">Triangle API Client</h1>
+    </div>
+
+    <!-- Form to create triangle -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Create New Triangle</h5>
+        </div>
+        <div class="card-body">
+            <form id="triangleForm" class="row g-3">
+                <div class="col-12">
+                    <label for="a" class="form-label">Side A</label>
+                    <input type="number" step="0.01" class="form-control" id="a" required value="0.00">
+                </div>
+                <div class="col-12">
+                    <label for="b" class="form-label">Side B</label>
+                    <input type="number" step="0.01" class="form-control" id="b" required value="0.00">
+                </div>
+                <div class="col-12">
+                    <label for="c" class="form-label">Side C</label>
+                    <input type="number" step="0.01" class="form-control" id="c" required value="0.00">
+                </div>
+                <div class="col-12 text-center mt-4">
+                    <button type="submit" class="btn btn-primary me-2">Save Triangle</button>
+                    <button type="button" id="resetValues" class="btn btn-secondary">Reset Values</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Button and output for summary -->
+    <div class="card">
+        <div class="card-header">
+            <h5>Triangles Summary</h5>
+        </div>
+        <div class="card-body text-center">
+            <button id="getSummary" class="btn btn-success mb-3">Get Summary</button>
+
+            <!-- Message output -->
+            <div id="messageOutput" class="my-3"></div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered" id="summaryTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Number of Triangles</th>
+                            <th>Total Surface</th>
+                            <th>Total Circumference</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryTableBody">
+                        <tr>
+                            <td colspan="3" class="text-muted">No data</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <button id="exportCsv" class="btn btn-warning mb-3">Export Summary to CSV</button>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const form = document.getElementById('triangleForm');
+    const getSummaryButton = document.getElementById('getSummary');
+    const summaryTableBody = document.getElementById('summaryTableBody');
+    const resetButton = document.getElementById('resetValues');
+
+    document.addEventListener('DOMContentLoaded', () => {
+        formatInputs();
+        loadSummary();
+    });
+
+    function formatInputs() {
+        ['a', 'b', 'c'].forEach(id => {
+            const input = document.getElementById(id);
+            input.value = parseFloat(input.value).toFixed(2);
+        });
+    }
+
+    async function loadSummary() {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/triangles');
+
+            if (response.ok) {
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    const result = await response.json();
+
+                    summaryTableBody.innerHTML = `
+                        <tr>
+                            <td>${result.number_of_triangles}</td>
+                            <td>${result.total_surface}</td>
+                            <td>${result.total_circumference}</td>
+                        </tr>
+                    `;
+                } else {
+                    summaryTableBody.innerHTML = `<tr><td colspan="3">✅ No JSON returned, but request was successful.</td></tr>`;
+                }
+            } else {
+                summaryTableBody.innerHTML = `<tr><td colspan="3">❌ Server error: ${response.status}</td></tr>`;
+            }
+        } catch (error) {
+            summaryTableBody.innerHTML = `<tr><td colspan="3">❌ Error fetching summary.</td></tr>`;
+            console.error(error);
+        }
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const a = parseFloat(document.getElementById('a').value);
+        const b = parseFloat(document.getElementById('b').value);
+        const c = parseFloat(document.getElementById('c').value);
+
+        if (isNaN(a) || isNaN(b) || isNaN(c)) {
+            showMessage('❌ All sides must be valid numbers.', 'danger');
+            return;
+        }
+
+        if (a <= 0 || b <= 0 || c <= 0) {
+            showMessage('❌ All sides must be greater than 0.', 'danger');
+            return;
+        }
+
+        if (a + b <= c || a + c <= b || b + c <= a) {
+            showMessage('❌ Invalid triangle sides. Sum of any two sides must be greater than the third side.', 'danger');
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/triangle/${a}/${b}/${c}`, {
+                method: 'POST'
+            });
+
+            const contentType = response.headers.get("content-type");
+
+            if (response.ok) {
+                if (contentType && contentType.includes("application/json")) {
+                    const result = await response.json();
+                    showMessage('✅ ' + result.message, 'success');
+                    form.reset();
+                    formatInputs();
+                    loadSummary();
+                } else {
+                    showMessage('✅ Triangle saved (no JSON response).', 'success');
+                    form.reset();
+                    formatInputs();
+                    loadSummary();
+                }
+            } else {
+                if (contentType && contentType.includes("application/json")) {
+                    const errorData = await response.json();
+                    showMessage('❌ Error: ' + (errorData.error || 'Unknown error'), 'danger');
+                } else {
+                    showMessage('❌ Server error: ' + response.status, 'danger');
+                }
+            }
+        } catch (error) {
+            showMessage('❌ Network error while saving triangle.', 'danger');
+            console.error(error);
+        }
+    });
+
+    getSummaryButton.addEventListener('click', loadSummary);
+
+    resetButton.addEventListener('click', () => {
+        ['a', 'b', 'c'].forEach(id => {
+            document.getElementById(id).value = '0.00';
+        });
+    });
+
+    function showMessage(message, type = 'success') {
+        const messageOutput = document.getElementById('messageOutput');
+
+        messageOutput.innerHTML = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+
+        setTimeout(() => {
+            const alertElement = messageOutput.querySelector('.alert');
+            if (alertElement) {
+                alertElement.classList.remove('show');
+                alertElement.classList.add('fade');
+                setTimeout(() => {
+                    if (alertElement.parentNode) {
+                        alertElement.parentNode.removeChild(alertElement);
+                    }
+                }, 300);
+            }
+        }, 3000);
+    }
+
+
+        document.getElementById('exportCsv').addEventListener('click', async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/triangles');
+
+            if (response.ok) {
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    const result = await response.json();
+
+                    const csvContent = [
+                        ["Number of Triangles", "Total Surface", "Total Circumference"],
+                        [result.number_of_triangles, result.total_surface, result.total_circumference]
+                    ].map(e => e.join(",")).join("\n");
+
+                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+
+                    const link = document.createElement("a");
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", "triangles_summary.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } else {
+                    showMessage('❌ Cannot export: Server did not return JSON.', 'danger');
+                }
+            } else {
+                showMessage('❌ Server error during export.', 'danger');
+            }
+        } catch (error) {
+            console.error(error);
+            showMessage('❌ Network error during export.', 'danger');
+        }
+    });
+
+
+</script>
+
+</body>
+</html>
