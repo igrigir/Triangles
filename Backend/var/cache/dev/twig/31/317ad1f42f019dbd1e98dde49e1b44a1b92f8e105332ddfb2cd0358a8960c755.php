@@ -85,6 +85,6 @@ class __TwigTemplate_2f0d179cdc68d0e11c69f68721a9bda5bc15a7ac098177e7fbdbcaeed04
     <path d=\"M4 6v6a8 3 0 0 0 16 0v-6\"></path>
     <path d=\"M4 12v6a8 3 0 0 0 16 0v-6\"></path>
 </svg>
-", "@Doctrine/Collector/database.svg", "C:\\Users\\igor\\Documents\\GitHub\\NEWGIT\\Triangles\\Backend\\vendor\\doctrine\\doctrine-bundle\\templates\\Collector\\database.svg");
+", "@Doctrine/Collector/database.svg", "C:\\GIT\\Students\\Triangles\\Backend\\vendor\\doctrine\\doctrine-bundle\\templates\\Collector\\database.svg");
     }
 }

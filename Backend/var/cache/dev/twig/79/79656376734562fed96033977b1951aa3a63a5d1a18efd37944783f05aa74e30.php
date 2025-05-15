@@ -111,6 +111,6 @@ class __TwigTemplate_e8ceda9b9315bcdd0f32cb94927404af58d4c42f939c5b4effddd8cca78
 .container.body_default {
     border-top: 8px solid #aaaaaa;
 }
-", "@email/zurb_2/notification/local.css", "C:\\Users\\igor\\Documents\\GitHub\\NEWGIT\\Triangles\\Backend\\vendor\\symfony\\twig-bridge\\Resources\\views\\Email\\zurb_2\\notification\\local.css");
+", "@email/zurb_2/notification/local.css", "C:\\GIT\\Students\\Triangles\\Backend\\vendor\\symfony\\twig-bridge\\Resources\\views\\Email\\zurb_2\\notification\\local.css");
     }
 }

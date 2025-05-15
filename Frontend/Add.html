@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Triangle</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+
+    <div class="text-center mb-4">
+        <h2>Add New Triangle</h2>
+        <a href="index.html" class="btn btn-secondary">← Back to Main</a>
+    </div>
+
+    <form id="addTriangleForm" class="card p-4 shadow-sm">
+        <div class="mb-3">
+            <label for="sideA" class="form-label">Side A</label>
+            <input type="number" step="0.01" min="0" class="form-control" id="sideA" required>
+        </div>
+        <div class="mb-3">
+            <label for="sideB" class="form-label">Side B</label>
+            <input type="number" step="0.01" min="0" class="form-control" id="sideB" required>
+        </div>
+        <div class="mb-3">
+            <label for="sideC" class="form-label">Side C</label>
+            <input type="number" step="0.01" min="0" class="form-control" id="sideC" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Triangle</button>
+    </form>
+
+    <div id="resultMessage" class="mt-4"></div>
+
+</div>
+
+<script>
+    document.getElementById('addTriangleForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const a = parseFloat(document.getElementById('sideA').value);
+        const b = parseFloat(document.getElementById('sideB').value);
+        const c = parseFloat(document.getElementById('sideC').value);
+        const messageDiv = document.getElementById('resultMessage');
+
+        // Validacija stranica trokuta
+        if (a <= 0 || b <= 0 || c <= 0 || a + b <= c || a + c <= b || b + c <= a) {
+            messageDiv.innerHTML = `<div class="alert alert-danger">❌ Invalid triangle sides.</div>`;
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/triangle/${a}/${b}/${c}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                messageDiv.innerHTML = `<div class="alert alert-success">✅ ${result.message}</div>`;
+                e.target.reset();
+            } else {
+                const errorData = await response.json();
+                messageDiv.innerHTML = `<div class="alert alert-danger">❌ ${errorData.error || 'Unknown error'}</div>`;
+            }
+        } catch (err) {
+            console.error(err);
+            messageDiv.innerHTML = `<div class="alert alert-danger">❌ Network error occurred.</div>`;
+        }
+    });
+</script>
+</body>
+</html>

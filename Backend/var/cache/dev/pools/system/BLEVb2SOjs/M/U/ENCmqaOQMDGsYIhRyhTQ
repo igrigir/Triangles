@@ -1,0 +1,3 @@
+<?php //App%255CController%255CTriangleController%2523getAllTriangles
+
+return [PHP_INT_MAX, []];

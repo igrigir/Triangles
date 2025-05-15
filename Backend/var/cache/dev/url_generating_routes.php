@@ -5,6 +5,9 @@
 return [
     'add_triangle' => [['a', 'b', 'c'], ['_controller' => 'App\\Controller\\TriangleController::addTriangle'], [], [['variable', '/', '[^/]++', 'c', true], ['variable', '/', '[^/]++', 'b', true], ['variable', '/', '[^/]++', 'a', true], ['text', '/triangle']], [], [], []],
     'triangle_summary' => [[], ['_controller' => 'App\\Controller\\TriangleController::getSummary'], [], [['text', '/triangles']], [], [], []],
+    'get_all_triangles' => [[], ['_controller' => 'App\\Controller\\TriangleController::getAllTriangles'], [], [['text', '/triangles/all']], [], [], []],
+    'get_triangle_by_id' => [['id'], ['_controller' => 'App\\Controller\\TriangleController::getTriangleById'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/triangle/id']], [], [], []],
+    'edit_triangle' => [['id'], ['_controller' => 'App\\Controller\\TriangleController::editTriangle'], [], [['text', '/edit'], ['variable', '/', '[^/]++', 'id', true], ['text', '/triangle']], [], [], []],
     '_preview_error' => [['code', '_format'], ['_controller' => 'error_controller::preview', '_format' => 'html'], ['code' => '\\d+'], [['variable', '.', '[^/]++', '_format', true], ['variable', '/', '\\d+', 'code', true], ['text', '/_error']], [], [], []],
     '_wdt' => [['token'], ['_controller' => 'web_profiler.controller.profiler::toolbarAction'], [], [['variable', '/', '[^/]++', 'token', true], ['text', '/_wdt']], [], [], []],
     '_profiler_home' => [[], ['_controller' => 'web_profiler.controller.profiler::homeAction'], [], [['text', '/_profiler/']], [], [], []],

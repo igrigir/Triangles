@@ -85,6 +85,6 @@ class __TwigTemplate_0e1847554a461dad3355b1db9e460f86e15eefd665847d4880b828ebc5d
     <line x1=\"7\" y1=\"7\" x2=\"7\" y2=\"17\"></line>
     <line x1=\"4\" y1=\"8\" x2=\"4\" y2=\"16\"></line>
 </svg>
-", "@DoctrineMigrations/Collector/icon-v3.svg", "C:\\Users\\igor\\Documents\\GitHub\\NEWGIT\\Triangles\\Backend\\vendor\\doctrine\\doctrine-migrations-bundle\\templates\\Collector\\icon-v3.svg");
+", "@DoctrineMigrations/Collector/icon-v3.svg", "C:\\GIT\\Students\\Triangles\\Backend\\vendor\\doctrine\\doctrine-migrations-bundle\\templates\\Collector\\icon-v3.svg");
     }
 }

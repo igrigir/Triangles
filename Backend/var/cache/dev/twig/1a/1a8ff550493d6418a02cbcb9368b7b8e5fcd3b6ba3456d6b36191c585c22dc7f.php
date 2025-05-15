@@ -176,6 +176,6 @@ class __TwigTemplate_cf79f113e68b383c7ccbd0314a528d626b1b48f7961c052556e149f9489
     </ul>
 </div>
 {% endblock %}
-", "triangle/index.html.twig", "C:\\Users\\igor\\Documents\\GitHub\\NEWGIT\\Triangles\\Backend\\templates\\triangle\\index.html.twig");
+", "triangle/index.html.twig", "C:\\GIT\\Students\\Triangles\\Backend\\templates\\triangle\\index.html.twig");
     }
 }

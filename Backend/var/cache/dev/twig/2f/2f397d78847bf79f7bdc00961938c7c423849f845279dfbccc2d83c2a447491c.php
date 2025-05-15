@@ -222,6 +222,6 @@ class __TwigTemplate_6d794379a190eff472f1d8e553ed3a65530e0b6c4438b4aba33624d0c51
         {% block body %}{% endblock %}
     </body>
 </html>
-", "base.html.twig", "C:\\Users\\igor\\Documents\\GitHub\\NEWGIT\\Triangles\\Backend\\templates\\base.html.twig");
+", "base.html.twig", "C:\\GIT\\Students\\Triangles\\Backend\\templates\\base.html.twig");
     }
 }

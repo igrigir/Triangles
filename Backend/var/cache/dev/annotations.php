@@ -68,6 +68,12 @@ return [[
 '[C]App%5CController%5CTriangleController%23addTriangle' => 1,
 'App%5CController%5CTriangleController%23getSummary' => 0,
 '[C]App%5CController%5CTriangleController%23getSummary' => 1,
+'App%5CController%5CTriangleController%23getAllTriangles' => 0,
+'[C]App%5CController%5CTriangleController%23getAllTriangles' => 1,
+'App%5CController%5CTriangleController%23getTriangleById' => 0,
+'[C]App%5CController%5CTriangleController%23getTriangleById' => 1,
+'App%5CController%5CTriangleController%23editTriangle' => 0,
+'[C]App%5CController%5CTriangleController%23editTriangle' => 1,
 'App%5CEntity%5CTriangle' => 0,
 '[C]App%5CEntity%5CTriangle' => 1,
 'App%5CEntity%5CTriangle%23getId' => 0,
@@ -664,6 +670,6 @@ return [[
 ], [
 
 0 => [],
-1 => 1745789005,
+1 => 1747340041,
 
 ]];

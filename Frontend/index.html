@@ -31,7 +31,37 @@
     <!-- Naslov u gradijent bloku -->
     <div class="header-gradient text-center">
         <h1 class="mb-0">Triangle API Client</h1>
+	<a href="add.html" class="btn btn-success mt-3">➕ Add New Triangle</a>
+	<a href="triangles.html" class="btn btn-info mt-3">View All Triangles</a>
     </div>
+
+<!-- Table of all triangles -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h5>All Triangles</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Side A</th>
+                        <th>Side B</th>
+                        <th>Side C</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="triangleListBody">
+                    <tr>
+                        <td colspan="5" class="text-muted">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 
     <!-- Form to create triangle -->
     <div class="card mb-4">
@@ -270,6 +300,62 @@
     });
 
 
+
+    async function loadTrianglesTable() {
+        const tbody = document.getElementById('triangleListBody');
+        try {
+            const res = await fetch('http://127.0.0.1:8000/triangles/all');
+            const data = await res.json();
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-muted">No triangles found.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = '';
+            data.forEach(t => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${t.id}</td>
+                        <td>${t.a}</td>
+                        <td>${t.b}</td>
+                        <td>${t.c}</td>
+                        <td>
+                            <a href="edit.html?id=${t.id}" class="btn btn-sm btn-warning">Edit</a>
+                            <button class="btn btn-sm btn-danger ms-2" onclick="deleteTriangle(${t.id})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        } catch (e) {
+            console.error(e);
+            tbody.innerHTML = '<tr><td colspan="5" class="text-danger">Error loading data.</td></tr>';
+        }
+    }
+
+    async function deleteTriangle(id) {
+        if (!confirm('Are you sure you want to delete this triangle?')) return;
+
+        try {
+            const res = await fetch(`http://127.0.0.1:8000/triangle/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (res.ok) {
+                alert('✅ Triangle deleted!');
+                loadTrianglesTable();
+            } else {
+                alert('❌ Error deleting triangle.');
+            }
+        } catch (err) {
+            alert('❌ Network error.');
+            console.error(err);
+        }
+    }
+
+    // Na kraju DOM loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        loadTrianglesTable();
+    });
 </script>
 
 </body>

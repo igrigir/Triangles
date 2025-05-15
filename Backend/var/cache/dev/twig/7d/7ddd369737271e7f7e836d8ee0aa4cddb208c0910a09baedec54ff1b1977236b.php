@@ -1866,6 +1866,6 @@ class __TwigTemplate_a288b0856dc4b63a97b96b8cffa39eeea33d599b50f223ad3fe0c5c3d4e
         </tbody>
     </table>
 {% endmacro %}
-", "@Doctrine/Collector/db.html.twig", "C:\\Users\\igor\\Documents\\GitHub\\NEWGIT\\Triangles\\Backend\\vendor\\doctrine\\doctrine-bundle\\templates\\Collector\\db.html.twig");
+", "@Doctrine/Collector/db.html.twig", "C:\\GIT\\Students\\Triangles\\Backend\\vendor\\doctrine\\doctrine-bundle\\templates\\Collector\\db.html.twig");
     }
 }
